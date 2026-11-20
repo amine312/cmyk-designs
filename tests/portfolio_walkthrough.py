@@ -38,8 +38,12 @@ def run(page):
         assert amount in el.inner_text(), el.inner_text()
         return el
 
+    page.goto(BASE + "index.php?page=settings")
+    form("settings_save").locator('[name="company_address"]').fill("Atelier de démonstration, Tanger")
+    submit("settings_save")
     page.goto(BASE + "index.php?page=client_form")
     form("client_save").locator('[name="company"]').fill(CLIENT)
+    form("client_save").locator('[name="address"]').fill("Studio de démonstration, Tanger")
     submit("client_save")
     page.get_by_text(CLIENT, exact=True).first.wait_for()
 
