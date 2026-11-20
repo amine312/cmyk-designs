@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/portfolio-walkthrough.yml'
+      - 'tests/portfolio_walkthrough.py'
 permissions:
   contents: write
 jobs:
