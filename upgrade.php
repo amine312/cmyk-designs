@@ -1,0 +1,8 @@
+<?php
+declare(strict_types=1);require __DIR__.'/app/bootstrap.php';sessionInit();
+if(!user())go('index.php');requirePage('settings');require __DIR__.'/app/migrations.php';
+$version=(int)scalar("SELECT meta_value FROM app_meta WHERE meta_key='schema_version'");$error='';$done=$version===SCHEMA_VERSION;
+if($_SERVER['REQUEST_METHOD']==='POST'){
+    checkCsrf();try{if(($_POST['backup_confirmed']??'')!=='1')throw new DomainException('Confirmez votre sauvegarde avant la migration.');migrateToV11();$done=true;}catch(DomainException $ex){$error=$ex->getMessage();}
+}
+?><!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mise à jour · CMYK Designs</title><link rel="stylesheet" href="assets/style.css"></head><body class="auth-body"><main class="auth-card"><div class="brand-text">CMYK<span>designs.</span></div><h1><?=$done?'Mise à jour terminée.':'Passer à la version 0.8.'?></h1><p class="muted">Charges et trésorerie : caisse, banque, règlements clients et transferts internes. Les clients et commandes existants sont conservés.</p><?php if($error):?><div role="alert" class="notice error"><?=e($error)?></div><?php endif?><?php if($done):?><p><a class="btn primary" href="index.php">Ouvrir mon espace →</a></p><?php else:?><form method="post" class="form-stack"><?=csrf()?><label><input type="checkbox" required name="backup_confirmed" value="1"> J’ai une sauvegarde SQL complète et une copie de mon ancienne version.</label><button class="btn primary">Appliquer la migration vers le schéma 11</button></form><?php endif?></main></body></html>

@@ -1,0 +1,5 @@
+CMYK Designs
+Version: 0.8.0
+Schema: 11
+Date: 2026-11-04
+Etape 5 en cours : charges, caisse/banque et transferts de suivi.
